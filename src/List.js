@@ -2,7 +2,7 @@ import React from "react";
 import { useStore } from "./store";
 
 // const List = ({ items }) => {
-const List = ({ items }) => {
+const List = () => {
   const itemsFromStore = useStore((state) => state.items);
   return (
     <table>
