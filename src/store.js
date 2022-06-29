@@ -3,27 +3,26 @@ import produce from "immer";
 import { foods } from "./data";
 
 export const useStore = create((set) => ({
-  foods: foods.map((food) => {
+  items: foods.map((food) => {
     return { ...food, isVisible: true };
   }),
   filter: "",
   setFilter: (filter) =>
     set(
       produce((state) => {
-        state.filter = filter;
+        const newFilter = filter ? filter.trim().toLowerCase() : "";
+        state.filter = newFilter;
         // hide food if it "contains" filter
-        state.foods = state.foods.filter((todo) => todo.name === filter);
-      })
-    ),
-  // just zustand:
-  // add: (title) => set((state) => ({ todos: [...state.todos, { title }] }))
-  // using immer with zustand
-  removeBook: (bookId) =>
-    set(
-      produce((state) => {
-        state.todoList = state.todoList.filter((todo) => todo.id !== bookId);
-        // hide update book form if it is currently displayed
-        state.book = undefined;
+        state.items = foods.map((food) => {
+          console.log(food.name, ": ", filter);
+          return {
+            ...food,
+            isVisible: food.name.toLowerCase().includes(newFilter)
+              ? true
+              : false
+          };
+        });
+        console.log("state.items ", state.items);
       })
     )
 }));
